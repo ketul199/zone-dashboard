@@ -3,7 +3,7 @@ import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder
 
 st.set_page_config(page_title="Nifty 500 Zone Viewer", layout="wide")
-st.title("📊 Nifty 500 Demand–Supply Zones")
+st.title("📊 Nifty 500 25-75-125 min Demand–Supply Zones")
 
 df = pd.read_csv("zones.csv")
 
