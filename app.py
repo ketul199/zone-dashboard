@@ -2,6 +2,12 @@ import streamlit as st
 import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder
 import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+ist_time = datetime.now(ZoneInfo("Asia/Kolkata"))
+
+
 
 st.set_page_config(page_title="Zone Dashboard", layout="wide")
 st.title("📊 Demand–Supply Zone Dashboard")
@@ -10,7 +16,7 @@ st.title("📊 Demand–Supply Zone Dashboard")
 if st.button("🔄 Refresh Data"):
     st.experimental_rerun()
 
-st.caption(f"🕒 Page refreshed at: {time.strftime('%d-%m-%Y %H:%M:%S')}")
+st.caption(f"🕒 Last refreshed (IST): {ist_time.strftime('%d-%m-%Y %H:%M:%S')}")
 
 # ---------------- CSV Selection ----------------
 CSV_OPTIONS = {
