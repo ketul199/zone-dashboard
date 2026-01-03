@@ -33,10 +33,9 @@ selected_csv = st.selectbox(
 @st.cache_data(ttl=0)
 def load_csv_from_github(raw_url):
     cache_buster = int(time.time())
-    url = f"{raw_url}?ts={cache_buster}"
-    return pd.read_csv(url)
+    return pd.read_csv(f"{raw_url}?ts={cache_buster}")
 
-# ---------------- Load CSV Safely ----------------
+# ---------------- Load CSV ----------------
 try:
     df = load_csv_from_github(CSV_OPTIONS[selected_csv])
 except Exception as e:
@@ -45,24 +44,18 @@ except Exception as e:
     st.exception(e)
     st.stop()
 
-# ---------------- Data Table ----------------
-gb = GridOptionsBuilder.from_dataframe(df)
-gb.configure_default_column(filter=True, sortable=True, resizable=True)
-gb.configure_side_bar()
-gb.configure_pagination(paginationAutoPageSize=True)
+# ---------------- Table Height ----------------
+table_height = 650   # desktop friendly
 
-# AgGrid(df, gridOptions=gb.build(), height=650)
-
-
-
-
-# ---------- AgGrid ----------
+# ---------------- AgGrid (AUTO-SIZE TO CONTENT) ----------------
 gb = GridOptionsBuilder.from_dataframe(df)
 
 gb.configure_default_column(
     filter=True,
     sortable=True,
-    resizable=True
+    resizable=True,
+    minWidth=90,
+    maxWidth=300
 )
 
 gb.configure_side_bar()
@@ -78,7 +71,6 @@ AgGrid(
     df,
     gridOptions=gb.build(),
     height=table_height,
-    fit_columns_on_grid_load=False,
-    allow_unsafe_jscode=True,
+    fit_columns_on_grid_load=False,  # IMPORTANT
+    allow_unsafe_jscode=True
 )
-
