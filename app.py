@@ -5,7 +5,6 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import time
 
-# ---------------- Page Config ----------------
 st.set_page_config(page_title="Zone Dashboard", layout="wide")
 st.title("📊 Demand–Supply Zone Dashboard")
 
@@ -18,11 +17,11 @@ if st.button("🔄 Refresh Data"):
 ist_time = datetime.now(ZoneInfo("Asia/Kolkata"))
 st.caption(f"🕒 Last refreshed (IST): {ist_time.strftime('%d-%m-%Y %H:%M:%S')}")
 
-# ---------------- GitHub RAW CSV URLs ----------------
+# ---------------- GitHub RAW URLs ----------------
 CSV_OPTIONS = {
-    "Equity Zones": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/zones.csv",
-    "75–125 Min Zones": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/zones_25_75_125.csv",
-    "15–30 Min Zones": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/zones_15_30.csv"
+    "Equity Zones": "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/zones.csv",
+    "75–125 Min Zones": "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/zones_25_75_125.csv",
+    "15–30 Min Zones": "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/zones_15_30.csv"
 }
 
 selected_csv = st.selectbox(
@@ -30,28 +29,26 @@ selected_csv = st.selectbox(
     list(CSV_OPTIONS.keys())
 )
 
-# ---------------- Force Fresh Load (NO CACHE EVER) ----------------
+# ---------------- CSV Loader (NO CACHE) ----------------
 @st.cache_data(ttl=0)
 def load_csv_from_github(raw_url):
-    cache_buster = int(time.time())  # breaks GitHub + Streamlit caching
+    cache_buster = int(time.time())
     url = f"{raw_url}?ts={cache_buster}"
     return pd.read_csv(url)
 
-df = load_csv_from_github(CSV_OPTIONS[selected_csv])
+# ---------------- Load CSV Safely ----------------
+try:
+    df = load_csv_from_github(CSV_OPTIONS[selected_csv])
+except Exception as e:
+    st.error("❌ Failed to load CSV from GitHub")
+    st.code(CSV_OPTIONS[selected_csv])
+    st.exception(e)
+    st.stop()
 
 # ---------------- Data Table ----------------
 gb = GridOptionsBuilder.from_dataframe(df)
-gb.configure_default_column(
-    filter=True,
-    sortable=True,
-    resizable=True
-)
+gb.configure_default_column(filter=True, sortable=True, resizable=True)
 gb.configure_side_bar()
 gb.configure_pagination(paginationAutoPageSize=True)
 
-AgGrid(
-    df,
-    gridOptions=gb.build(),
-    height=650,
-    fit_columns_on_grid_load=True
-)
+AgGrid(df, gridOptions=gb.build(), height=650)
