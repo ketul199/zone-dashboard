@@ -51,4 +51,34 @@ gb.configure_default_column(filter=True, sortable=True, resizable=True)
 gb.configure_side_bar()
 gb.configure_pagination(paginationAutoPageSize=True)
 
-AgGrid(df, gridOptions=gb.build(), height=650)
+# AgGrid(df, gridOptions=gb.build(), height=650)
+
+
+
+
+# ---------- AgGrid ----------
+gb = GridOptionsBuilder.from_dataframe(df)
+
+gb.configure_default_column(
+    filter=True,
+    sortable=True,
+    resizable=True
+)
+
+gb.configure_side_bar()
+gb.configure_pagination(paginationAutoPageSize=True)
+
+# 🔑 Auto-size magic
+gb.configure_grid_options(
+    suppressColumnVirtualisation=True,
+    domLayout="normal"
+)
+
+AgGrid(
+    df,
+    gridOptions=gb.build(),
+    height=table_height,
+    fit_columns_on_grid_load=False,
+    allow_unsafe_jscode=True,
+)
+
