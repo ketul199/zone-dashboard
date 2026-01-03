@@ -9,6 +9,7 @@ st.title("📊 Demand–Supply Zone Dashboard")
 
 # ---------------- Refresh Button ----------------
 if st.button("🔄 Refresh Data"):
+    st.cache_data.clear()
     st.experimental_rerun()
 
 # ---------------- IST Time ----------------
@@ -27,8 +28,12 @@ selected_csv = st.selectbox(
     list(CSV_OPTIONS.keys())
 )
 
-# ---------------- Load CSV ----------------
-df = pd.read_csv(CSV_OPTIONS[selected_csv])
+# ---------------- Force Fresh CSV Load ----------------
+@st.cache_data(ttl=0)
+def load_csv(path):
+    return pd.read_csv(path)
+
+df = load_csv(CSV_OPTIONS[selected_csv])
 
 # ---------------- Data Table ----------------
 gb = GridOptionsBuilder.from_dataframe(df)
