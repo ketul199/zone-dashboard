@@ -10,7 +10,8 @@ st.title("📊 Demand–Supply Zone Dashboard")
 # ---------------- Refresh Button ----------------
 if st.button("🔄 Refresh Data"):
     st.cache_data.clear()
-    st.experimental_rerun()
+    st.rerun()
+
 
 # ---------------- IST Time ----------------
 ist_time = datetime.now(ZoneInfo("Asia/Kolkata"))
