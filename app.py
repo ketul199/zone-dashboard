@@ -19,9 +19,9 @@ st.caption(f"🕒 Last refreshed (IST): {ist_time.strftime('%d-%m-%Y %H:%M:%S')}
 
 # ---------------- GitHub RAW URLs ----------------
 CSV_OPTIONS = {
-    "Equity Zones": "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/zones.csv",
-    "75–125 Min Zones": "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/zones_25_75_125.csv",
-    "15–30 Min Zones": "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/zones_15_30.csv"
+    "Equity Zones": "https://raw.githubusercontent.com/ketul199/zone-dashboard/main/zones.csv",
+    "75–125 Min Zones": "https://raw.githubusercontent.com/ketul199/zone-dashboard/main/zones_25_75_125.csv",
+    "15–30 Min Zones": "https://raw.githubusercontent.com/ketul199/zone-dashboard/main/zones_15_30.csv"
 }
 
 selected_csv = st.selectbox(
